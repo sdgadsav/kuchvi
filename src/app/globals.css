@@ -88,29 +88,54 @@ body {
 }
 
 @layer utilities {
+  .animated-gradient {
+    background-size: 200% 200%;
+    background-image: linear-gradient(
+      -45deg,
+      hsl(var(--background)) 0%,
+      hsl(var(--primary) / 0.2) 25%,
+      hsl(var(--accent) / 0.2) 50%,
+      hsl(var(--background)) 75%,
+      hsl(var(--destructive) / 0.2) 100%
+    );
+    animation: animated-gradient 15s ease infinite;
+  }
+
   .glitch-text {
     @apply relative font-headline uppercase tracking-wider;
     color: hsl(var(--primary));
+    animation: blink 2s infinite;
   }
 
   .glitch-text::before,
   .glitch-text::after {
     content: attr(data-text);
     @apply absolute top-0 left-0 w-full h-full;
-    background: hsl(var(--background));
+    background: transparent;
     overflow: hidden;
   }
 
   .glitch-text::before {
     left: 2px;
     text-shadow: -2px 0 hsl(var(--accent));
-    animation: glitch-1 2.5s infinite linear alternate-reverse;
+    animation: glitch-1 5.5s infinite linear alternate-reverse;
   }
 
   .glitch-text::after {
     left: -2px;
     text-shadow: -2px 0 hsl(var(--destructive));
-    animation: glitch-2 2.5s infinite linear alternate-reverse;
+    animation: glitch-2 5.5s infinite linear alternate-reverse;
+  }
+  
+  @keyframes animated-gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes blink {
+    0%, 22%, 100% { opacity: 1; }
+    25%, 97% { opacity: 0.5; }
   }
 
   @keyframes glitch-1 {
