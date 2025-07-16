@@ -25,7 +25,7 @@ export default function Home() {
       }}
     >
       <h1
-        className="glitch-text text-5xl md:text-8xl lg:text-9xl text-center"
+        className="glitch-text text-5xl md:text-8xl lg:text-9xl text-center select-none"
         data-text={text}
       >
         {text}
@@ -34,7 +34,7 @@ export default function Home() {
         href={`https://wa.me/${WHATSAPP_NUMBER}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-4 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg transition-transform hover:scale-110"
+        className="fixed bottom-4 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg transition-transform hover:scale-110 select-none"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
