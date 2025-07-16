@@ -30,13 +30,13 @@ export default function Home() {
         {text}
       </h1>
       <a
-        href="https://wa.me/"
+        href="https://wa.me/1XXXXXXXXXX"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-4 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg transition-transform hover:scale-110"
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns="https://www.svgrepo.com/show/452133/whatsapp.svg"
           width="24"
           height="24"
           viewBox="0 0 24 24"
