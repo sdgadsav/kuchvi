@@ -33,7 +33,7 @@ export default function Home() {
         href="https://wa.me/"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-4 left-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg transition-transform hover:scale-110"
+        className="fixed bottom-4 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg transition-transform hover:scale-110"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -50,5 +50,3 @@ export default function Home() {
     </main>
   );
 }
-
-    
