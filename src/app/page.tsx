@@ -2,10 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { WHATSAPP_NUMBER } from "@/config";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [snowflakes, setSnowflakes] = useState<React.ReactNode[]>([]);
+  const fullText = "Coming Soon";
+  const [typedText, setTypedText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+  const [isCaptchaOpen, setIsCaptchaOpen] = useState(false);
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [num1, setNum1] = useState(0);
+  const [num2, setNum2] = useState(0);
+  const [captchaError, setCaptchaError] = useState("");
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -29,12 +41,47 @@ export default function Home() {
 
     createSnowflakes();
 
+    const typingTimeout = setTimeout(() => {
+      let i = 0;
+      const typingInterval = setInterval(() => {
+        if (i < fullText.length) {
+          setTypedText(fullText.substring(0, i + 1));
+          i++;
+        } else {
+          clearInterval(typingInterval);
+          setIsTyping(false);
+        }
+      }, 150);
+    }, 1200);
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      clearTimeout(typingTimeout);
     };
   }, []);
 
-  const text = "Coming Soon";
+  const handleWhatsappClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setNum1(Math.floor(Math.random() * 10) + 1);
+    setNum2(Math.floor(Math.random() * 10) + 1);
+    setCaptchaInput("");
+    setCaptchaError("");
+    setIsCaptchaOpen(true);
+  };
+
+  const handleCaptchaSubmit = () => {
+    if (parseInt(captchaInput, 10) === num1 + num2) {
+      setIsCaptchaOpen(false);
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}`, "_blank", "noopener,noreferrer");
+    } else {
+      setCaptchaError("Incorrect answer. Please try again.");
+    }
+  };
+
+  const text = isTyping ? typedText : fullText;
+  const showGlitch = !isTyping;
+  const showCursor = isTyping && typedText.length < fullText.length;
+
   return (
     <main
       className="flex items-center justify-center min-h-screen animated-grid p-4 relative overflow-hidden"
@@ -44,15 +91,14 @@ export default function Home() {
     >
       <div className="snow">{snowflakes}</div>
       <h1
-        className="glitch-text text-5xl md:text-8xl lg:text-9xl text-center select-none"
+        className={`text-5xl md:text-8xl lg:text-9xl text-center select-none ${showGlitch ? "glitch-text" : ""} ${showCursor ? "typewriter" : ""}`}
         data-text={text}
       >
         {text}
       </h1>
       <a
         href={`https://wa.me/${WHATSAPP_NUMBER}`}
-        target="_blank"
-        rel="noopener noreferrer"
+        onClick={handleWhatsappClick}
         className="fixed bottom-4 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg transition-transform hover:scale-110 select-none"
       >
         <svg
@@ -65,6 +111,36 @@ export default function Home() {
         </svg>
         <span className="sr-only">Contact on WhatsApp</span>
       </a>
+      <Dialog open={isCaptchaOpen} onOpenChange={setIsCaptchaOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you human?</DialogTitle>
+            <DialogDescription>
+              To prevent spam, please solve this simple math problem.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="flex items-center gap-2">
+              <Label htmlFor="captcha" className="text-right">
+                What is {num1} + {num2}?
+              </Label>
+              <Input
+                id="captcha"
+                value={captchaInput}
+                onChange={(e) => setCaptchaInput(e.target.value)}
+                className="col-span-3"
+                type="number"
+              />
+            </div>
+            {captchaError && (
+              <p className="text-sm text-destructive">{captchaError}</p>
+            )}
+          </div>
+          <DialogFooter>
+            <Button onClick={handleCaptchaSubmit}>Submit</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
